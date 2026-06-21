@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field
 
 from features import build_feature_row, align_to_model
 from commentary import load_commentary_stats, generate_commentary
+from validation import validate_accounting
 
 BASE = Path(__file__).parent
 
@@ -131,6 +132,7 @@ def predict(req: PredictRequest):
         "risk_level": level,
         "commentary": notes,
         "model_name": art["model_name"],
+        "input_warnings": validate_accounting(payload),
     }
 
 

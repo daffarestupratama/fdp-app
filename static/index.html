@@ -431,6 +431,7 @@
       </form>
 
       <div class="card" id="result">
+        <div id="warnings"></div>
         <div class="verdict">
           <h2 id="verdict-label"></h2>
           <span class="pill" id="verdict-pill"></span>
@@ -735,7 +736,15 @@
       // (F) TAMPILKAN HASIL
       // =========================================================================
       function render(d) {
+        const warnBox =
+          d.input_warnings && d.input_warnings.length
+            ? `<div class="err" style="display:block;background:var(--amber-bg);color:var(--amber);margin-bottom:14px;">Periksa kembali input: ${d.input_warnings.join(' ')}</div>`
+            : '';
+
         const r = document.getElementById('result');
+
+        document.getElementById('warnings').innerHTML = warnBox;
+        
         document.getElementById('verdict-label').textContent = d.distress_2y
           ? 'Diprediksi berisiko distress'
           : 'Diprediksi tidak distress';
