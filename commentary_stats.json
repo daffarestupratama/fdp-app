@@ -1,0 +1,305 @@
+{
+  "ppk": [
+    {
+      "ratio": "CashST_TA",
+      "label": "Kas & investasi jangka pendek terhadap total aset",
+      "direction": "high_good",
+      "shap_rank": 5,
+      "healthy_p25": 0.031682384394374326,
+      "healthy_median": 0.09077844342003136,
+      "healthy_p75": 0.19411707588211802
+    },
+    {
+      "ratio": "Sales_growth",
+      "label": "Pertumbuhan penjualan YoY",
+      "direction": "high_good",
+      "shap_rank": 8,
+      "healthy_p25": -0.14422239294149072,
+      "healthy_median": 0.05531287081924818,
+      "healthy_p75": 0.23504229586816444
+    },
+    {
+      "ratio": "ROE",
+      "label": "Return on equity (ROE)",
+      "direction": "high_good",
+      "shap_rank": 9,
+      "healthy_p25": -0.00447437181170582,
+      "healthy_median": 0.048588724075047246,
+      "healthy_p75": 0.12053923116246884
+    },
+    {
+      "ratio": "NetMargin",
+      "label": "Margin laba bersih",
+      "direction": "high_good",
+      "shap_rank": 10,
+      "healthy_p25": -0.011226378418533349,
+      "healthy_median": 0.04730608699532355,
+      "healthy_p75": 0.1469320802584761
+    },
+    {
+      "ratio": "CashST_CL",
+      "label": "Kas terhadap kewajiban lancar",
+      "direction": "high_good",
+      "shap_rank": 11,
+      "healthy_p25": 0.1096405111774139,
+      "healthy_median": 0.31551110224840817,
+      "healthy_p75": 0.9664064548974571
+    },
+    {
+      "ratio": "Debt_Equity",
+      "label": "Rasio utang terhadap ekuitas (DER)",
+      "direction": "low_good",
+      "shap_rank": 12,
+      "healthy_p25": 0.04298611145230587,
+      "healthy_median": 0.32535050923424946,
+      "healthy_p75": 0.7995887153958814
+    },
+    {
+      "ratio": "CR",
+      "label": "Current ratio",
+      "direction": "high_good",
+      "shap_rank": 14,
+      "healthy_p25": 1.051,
+      "healthy_median": 1.672,
+      "healthy_p75": 2.976
+    },
+    {
+      "ratio": "ROA",
+      "label": "Return on assets (ROA)",
+      "direction": "high_good",
+      "shap_rank": 15,
+      "healthy_p25": -0.008363318339940053,
+      "healthy_median": 0.01893907717225788,
+      "healthy_p75": 0.06129792046526832
+    }
+  ],
+  "negeq": [
+    {
+      "ratio": "ROE",
+      "label": "Return on equity (ROE)",
+      "direction": "high_good",
+      "shap_rank": 1,
+      "healthy_p25": 0.01698556726510375,
+      "healthy_median": 0.0777601100555336,
+      "healthy_p75": 0.15257952118691695
+    },
+    {
+      "ratio": "Debt_Equity",
+      "label": "Rasio utang terhadap ekuitas (DER)",
+      "direction": "low_good",
+      "shap_rank": 2,
+      "healthy_p25": 0.07468570911866977,
+      "healthy_median": 0.395388274554548,
+      "healthy_p75": 0.8967564381427452
+    },
+    {
+      "ratio": "NetMargin",
+      "label": "Margin laba bersih",
+      "direction": "high_good",
+      "shap_rank": 4,
+      "healthy_p25": 0.013390103251210489,
+      "healthy_median": 0.06546492801454776,
+      "healthy_p75": 0.17485418478647963
+    },
+    {
+      "ratio": "Equity_growth",
+      "label": "Pertumbuhan ekuitas YoY",
+      "direction": "high_good",
+      "shap_rank": 5,
+      "healthy_p25": 0.014342085515944958,
+      "healthy_median": 0.08405370822523961,
+      "healthy_p75": 0.18362331881126187
+    },
+    {
+      "ratio": "ROA",
+      "label": "Return on assets (ROA)",
+      "direction": "high_good",
+      "shap_rank": 6,
+      "healthy_p25": 0.0064974761508889735,
+      "healthy_median": 0.030741467569734577,
+      "healthy_p75": 0.07375297760842235
+    },
+    {
+      "ratio": "Equity_TA",
+      "label": "Proporsi ekuitas terhadap total aset",
+      "direction": "high_good",
+      "shap_rank": 7,
+      "healthy_p25": 0.33236940966008477,
+      "healthy_median": 0.4950328427019062,
+      "healthy_p75": 0.6773313106202882
+    },
+    {
+      "ratio": "Debt_TA",
+      "label": "Utang berbunga terhadap total aset",
+      "direction": "low_good",
+      "shap_rank": 8,
+      "healthy_p25": 0.04017217989127865,
+      "healthy_median": 0.1902198844566202,
+      "healthy_p75": 0.360307289422778
+    },
+    {
+      "ratio": "CR",
+      "label": "Current ratio",
+      "direction": "high_good",
+      "shap_rank": 9,
+      "healthy_p25": 1.119,
+      "healthy_median": 1.599,
+      "healthy_p75": 2.793
+    },
+    {
+      "ratio": "Altman_X3_EBIT_TA",
+      "label": "EBIT terhadap total aset",
+      "direction": "high_good",
+      "shap_rank": 10,
+      "healthy_p25": 0.02225501346768046,
+      "healthy_median": 0.061395299724825964,
+      "healthy_p75": 0.10851117109188022
+    },
+    {
+      "ratio": "TL_TA",
+      "label": "Total liabilitas terhadap total aset",
+      "direction": "low_good",
+      "shap_rank": 11,
+      "healthy_p25": 0.3185300053471845,
+      "healthy_median": 0.5014159669527639,
+      "healthy_p75": 0.6737004534571142
+    },
+    {
+      "ratio": "NetDebt_EBITDA",
+      "label": "Net debt terhadap EBITDA",
+      "direction": "low_good",
+      "shap_rank": 12,
+      "healthy_p25": -0.6021781056820584,
+      "healthy_median": 1.1336888593701953,
+      "healthy_p75": 3.3962041279640744
+    },
+    {
+      "ratio": "OpMargin",
+      "label": "Margin laba operasi",
+      "direction": "high_good",
+      "shap_rank": 13,
+      "healthy_p25": 0.036005588029737336,
+      "healthy_median": 0.10097424421776888,
+      "healthy_p75": 0.2369804873107058
+    },
+    {
+      "ratio": "Altman_X4_MVE_TL",
+      "label": "Nilai pasar ekuitas terhadap liabilitas",
+      "direction": "high_good",
+      "shap_rank": 14,
+      "healthy_p25": 0.44593670818757825,
+      "healthy_median": 1.1353011651473157,
+      "healthy_p75": 3.1964599221384327
+    },
+    {
+      "ratio": "GrossMargin",
+      "label": "Margin laba kotor",
+      "direction": "high_good",
+      "shap_rank": 15,
+      "healthy_p25": 0.15360460739558296,
+      "healthy_median": 0.3044168118673207,
+      "healthy_p75": 0.5546354866302234
+    }
+  ],
+  "conloss": [
+    {
+      "ratio": "ROE",
+      "label": "Return on equity (ROE)",
+      "direction": "high_good",
+      "shap_rank": 1,
+      "healthy_p25": 0.04775414808679032,
+      "healthy_median": 0.10369723138774325,
+      "healthy_p75": 0.1707893027122932
+    },
+    {
+      "ratio": "NetMargin",
+      "label": "Margin laba bersih",
+      "direction": "high_good",
+      "shap_rank": 2,
+      "healthy_p25": 0.0315734091736454,
+      "healthy_median": 0.08840107785870925,
+      "healthy_p75": 0.20625792599221754
+    },
+    {
+      "ratio": "Altman_X3_EBIT_TA",
+      "label": "EBIT terhadap total aset",
+      "direction": "high_good",
+      "shap_rank": 3,
+      "healthy_p25": 0.042472391243610824,
+      "healthy_median": 0.0772590638596303,
+      "healthy_p75": 0.12522211648977757
+    },
+    {
+      "ratio": "NetDebt_EBITDA",
+      "label": "Net debt terhadap EBITDA",
+      "direction": "low_good",
+      "shap_rank": 5,
+      "healthy_p25": -0.6512048998161715,
+      "healthy_median": 0.8413189571128066,
+      "healthy_p75": 2.687222706115124
+    },
+    {
+      "ratio": "ROA",
+      "label": "Return on assets (ROA)",
+      "direction": "high_good",
+      "shap_rank": 7,
+      "healthy_p25": 0.016856641955950522,
+      "healthy_median": 0.04260148929480308,
+      "healthy_p75": 0.08451324566230682
+    },
+    {
+      "ratio": "NI_growth",
+      "label": "Pertumbuhan laba bersih YoY",
+      "direction": "high_good",
+      "shap_rank": 8,
+      "healthy_p25": -0.2857757791591722,
+      "healthy_median": 0.09382398940302972,
+      "healthy_p75": 0.4299374965288625
+    },
+    {
+      "ratio": "Altman_X5_SalesTA_AssetTurnover",
+      "label": "Perputaran total aset (Asset Turnover)",
+      "direction": "high_good",
+      "shap_rank": 10,
+      "healthy_p25": 0.21866933977144254,
+      "healthy_median": 0.6439426879434806,
+      "healthy_p75": 1.1839401551715545
+    },
+    {
+      "ratio": "Debt_TA",
+      "label": "Utang berbunga terhadap total aset",
+      "direction": "low_good",
+      "shap_rank": 12,
+      "healthy_p25": 0.033386574483776806,
+      "healthy_median": 0.16683922332715798,
+      "healthy_p75": 0.32962078957758506
+    },
+    {
+      "ratio": "CFO_growth",
+      "label": "Pertumbuhan arus kas operasi YoY",
+      "direction": "high_good",
+      "shap_rank": 13,
+      "healthy_p25": -0.9160006026059522,
+      "healthy_median": -0.14181791507817104,
+      "healthy_p75": 0.47756434226759964
+    },
+    {
+      "ratio": "PPE_TA",
+      "label": "Proporsi aset tetap (PPE) terhadap total aset",
+      "direction": "high_good",
+      "shap_rank": 14,
+      "healthy_p25": 0.043715584889178496,
+      "healthy_median": 0.2211079795665669,
+      "healthy_p75": 0.43976090707854043
+    },
+    {
+      "ratio": "CFO_TL",
+      "label": "Arus kas operasi terhadap total liabilitas",
+      "direction": "high_good",
+      "shap_rank": 15,
+      "healthy_p25": -0.01485831355378731,
+      "healthy_median": 0.10358140378162471,
+      "healthy_p75": 0.2831910472043254
+    }
+  ]
+}

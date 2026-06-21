@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prediksi Financial Distress</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* --accent dst. adalah variabel TEMA. Nilainya diganti oleh JS setiap kali
+     user memilih indikator berbeda, sehingga seluruh warna ikut berubah. */
+      :root {
+        --ink: #16202e;
+        --muted: #5b6675;
+        --line: #dde3ea;
+        --bg: #eef1f5;
+        --surface: #ffffff;
+        --accent: #0d6e66;
+        --accent-d: #0a514b;
+        --accent-bg: #e6f3f1; /* default: tema ppk */
+        --green: #15803d;
+        --green-bg: #e8f5ec;
+        --amber: #b45309;
+        --amber-bg: #fdf2e0;
+        --red: #b91c1c;
+        --red-bg: #fdeaea;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: 'Inter', system-ui, sans-serif;
+        line-height: 1.55;
+      }
+      .wrap {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 32px 20px 80px;
+      }
+      header h1 {
+        font-size: 26px;
+        font-weight: 700;
+        margin: 0 0 4px;
+        letter-spacing: -0.01em;
+      }
+      header p {
+        margin: 0 0 24px;
+        color: var(--muted);
+        font-size: 15px;
+        max-width: 64ch;
+      }
+
+      /* ----- Tombol pemilih indikator (3 berderet, di paling atas) ----- */
+      .indicator-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+      }
+      .indicator-tabs button {
+        flex: 1;
+        min-width: 170px;
+        padding: 14px 12px;
+        border: 1px solid var(--line);
+        background: #fff;
+        border-radius: 11px;
+        font: inherit;
+        font-weight: 600;
+        color: var(--muted);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .indicator-tabs button:hover {
+        border-color: var(--accent);
+      }
+      .indicator-tabs button.active {
+        border-color: var(--accent);
+        color: var(--accent-d);
+        background: var(--accent-bg);
+        box-shadow: inset 0 0 0 2px var(--accent);
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 22px 24px;
+        margin-bottom: 18px;
+      }
+      fieldset {
+        border: none;
+        padding: 0;
+        margin: 0 0 22px;
+      }
+      legend {
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--accent-d);
+        padding: 0;
+        margin-bottom: 12px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 14px 18px;
+      }
+      label {
+        display: block;
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 5px;
+      }
+      /* nama akun versi Inggris, dicetak miring di bawah versi Indonesia */
+      label .en {
+        font-style: italic;
+        font-weight: 400;
+        color: #8a93a0;
+        font-size: 12px;
+      }
+      input,
+      select {
+        width: 100%;
+        padding: 9px 11px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        font-size: 14px;
+        font-family: inherit;
+        color: var(--ink);
+        background: #fff;
+      }
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-bg);
+      }
+      input[type='number'] {
+        font-family: 'IBM Plex Mono', monospace;
+        font-feature-settings: 'tnum';
+      }
+      .note-line {
+        font-size: 12px;
+        color: #8a93a0;
+        margin: -6px 0 10px;
+      }
+
+      .samples {
+        margin: 6px 0 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .samples span {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .btn {
+        appearance: none;
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        font-size: 15px;
+        font-weight: 600;
+        padding: 13px 26px;
+        border-radius: 9px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .btn:hover {
+        background: var(--accent-d);
+      }
+      .btn:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+      .btn.sm {
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+
+      /* ----- Panel hasil ----- */
+      #result {
+        display: none;
+      }
+      .verdict {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 6px;
+      }
+      .verdict h2 {
+        font-size: 21px;
+        margin: 0;
+        font-weight: 700;
+      }
+      .pill {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 11px;
+        border-radius: 999px;
+      }
+      .pill.green {
+        background: var(--green-bg);
+        color: var(--green);
+      }
+      .pill.amber {
+        background: var(--amber-bg);
+        color: var(--amber);
+      }
+      .pill.red {
+        background: var(--red-bg);
+        color: var(--red);
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 14px;
+        margin: 0 0 18px;
+      }
+      .gauge {
+        margin: 22px 0 8px;
+      }
+      .gauge .track {
+        position: relative;
+        height: 12px;
+        background: #eef1f5;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+      }
+      .gauge .fill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        border-radius: 999px;
+        background: var(--accent);
+      }
+      .gauge .thr {
+        position: absolute;
+        top: -4px;
+        bottom: -4px;
+        width: 2px;
+        background: var(--ink);
+      }
+      /* label di atas garis ambang */
+      .gauge .thr::after {
+        content: 'Batas Keputusan';
+        position: absolute;
+        top: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 11px;
+        color: var(--ink);
+        white-space: nowrap;
+      }
+      .nums {
+        display: flex;
+        gap: 26px;
+        margin-top: 14px;
+        font-family: 'IBM Plex Mono', monospace;
+        flex-wrap: wrap;
+      }
+      .nums div span {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        font-family: 'Inter', sans-serif;
+        margin-bottom: 2px;
+      }
+      .nums div b {
+        font-size: 19px;
+        font-weight: 600;
+      }
+      .notes h3 {
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--accent-d);
+        margin: 22px 0 12px;
+      }
+      .note {
+        border-left: 3px solid var(--line);
+        padding: 10px 14px;
+        margin-bottom: 10px;
+        background: #fafbfc;
+        border-radius: 0 8px 8px 0;
+      }
+      .note.tinggi {
+        border-left-color: var(--red);
+      }
+      .note.sedang {
+        border-left-color: var(--amber);
+      }
+      .note.ringan {
+        border-left-color: #cbd2db;
+      }
+      .note .top {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: baseline;
+      }
+      .note .name {
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .note .val {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .note .msg {
+        font-size: 13px;
+        margin: 5px 0 4px;
+      }
+      .note .sug {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .ok {
+        padding: 12px 14px;
+        background: var(--green-bg);
+        color: var(--green);
+        border-radius: 8px;
+        font-size: 14px;
+      }
+      .err {
+        padding: 12px 14px;
+        background: var(--red-bg);
+        color: var(--red);
+        border-radius: 8px;
+        font-size: 14px;
+        margin-top: 14px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>Prediksi Financial Distress</h1>
+        <p>
+          Masukkan akun keuangan perusahaan untuk memperkirakan potensi
+          financial distress dalam dua tahun ke depan, beserta tingkat risikonya
+          dan catatan pada kondisi keuangan yang kurang sehat.
+        </p>
+      </header>
+
+      <!-- (1) PEMILIH INDIKATOR: 3 tombol di paling atas. Tema warna berubah saat diklik. -->
+      <div class="indicator-tabs" id="indicator-tabs">
+        <button type="button" data-ind="ppk">Papan Pemantauan Khusus</button>
+        <button type="button" data-ind="negeq">Ekuitas Negatif</button>
+        <button type="button" data-ind="conloss">Rugi 2 Tahun Berturut</button>
+      </div>
+
+      <form id="form">
+        <div class="card">
+          <!-- (2) PROFIL: indikator sudah dipindah ke atas, jadi di sini tinggal sektor + identitas -->
+          <fieldset>
+            <legend>Profil</legend>
+            <div class="grid">
+              <div>
+                <label
+                  >Sektor industri<br /><em class="en"
+                    >Industry Group</em
+                  ></label
+                >
+                <select id="industry_group" name="industry_group"></select>
+              </div>
+              <!-- field profil numerik lain dibuat otomatis oleh JS di bawah -->
+              <div class="grid" id="grp-profil" style="display: contents"></div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Neraca — tahun berjalan (Rp juta)</legend>
+            <div class="grid" id="grp-neraca"></div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Laba rugi — tahun berjalan (Rp juta)</legend>
+            <div class="grid" id="grp-pnl"></div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Arus kas & pasar — tahun berjalan</legend>
+            <div class="grid" id="grp-cash"></div>
+          </fieldset>
+
+          <!-- (3) RASIO OPSIONAL: kalau diisi dipakai apa adanya; kalau kosong dihitung server -->
+          <fieldset>
+            <legend>Rasio (opsional)</legend>
+            <p class="note-line">
+              Isi bila punya angka resminya (mis. dari S&amp;P). Bila
+              dikosongkan, dihitung otomatis dari komponen di atas. Quick ratio
+              hitungan adalah aproksimasi dan bisa sedikit berbeda dari S&amp;P.
+            </p>
+            <div class="grid" id="grp-ratio"></div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Tahun sebelumnya — untuk pertumbuhan (Rp juta)</legend>
+            <div class="grid" id="grp-prev"></div>
+          </fieldset>
+
+          <!-- (4) TOMBOL DEMO: mengisi form otomatis dengan data contoh saat presentasi -->
+          <div class="samples">
+            <span>Isi contoh:</span>
+            <button
+              type="button"
+              class="btn sm"
+              onclick="fillForm('AALI 2023')"
+            >
+              AALI 2023
+            </button>
+            <!-- tambah tombol perusahaan lain di sini dengan pola yang sama -->
+          </div>
+
+          <button class="btn" type="submit" id="submit">Prediksi risiko</button>
+          <div class="err" id="err"></div>
+        </div>
+      </form>
+
+      <div class="card" id="result">
+        <div class="verdict">
+          <h2 id="verdict-label"></h2>
+          <span class="pill" id="verdict-pill"></span>
+        </div>
+        <p class="sub" id="verdict-sub"></p>
+        <div class="gauge">
+          <div class="track">
+            <div class="fill" id="gauge-fill"></div>
+            <div class="thr" id="gauge-thr"></div>
+          </div>
+        </div>
+        <div class="nums">
+          <div><span>Probabilitas distress</span><b id="num-prob"></b></div>
+          <div><span>Batas Keputusan</span><b id="num-thr"></b></div>
+          <div><span>Model</span><b id="num-model"></b></div>
+        </div>
+        <div class="notes" id="notes"></div>
+      </div>
+    </div>
+
+    <script>
+      // =========================================================================
+      // (A) TEMA WARNA PER INDIKATOR
+      // Tiap indikator punya satu set warna. setIndicator() menukar nilai variabel
+      // CSS (--accent dst.) di root sehingga seluruh halaman berganti warna.
+      // =========================================================================
+      const THEMES = {
+        ppk: { accent: '#0d6e66', accentD: '#0a514b', accentBg: '#e6f3f1' }, // teal
+        negeq: { accent: '#3b4cca', accentD: '#2a37a0', accentBg: '#eaecfb' }, // indigo
+        conloss: { accent: '#b4530c', accentD: '#8a3f08', accentBg: '#fcefe2' }, // amber
+      };
+      let currentIndicator = null; // indikator yang sedang dipilih
+
+      function setIndicator(id) {
+        currentIndicator = id;
+        const t = THEMES[id],
+          root = document.documentElement.style;
+        root.setProperty('--accent', t.accent);
+        root.setProperty('--accent-d', t.accentD);
+        root.setProperty('--accent-bg', t.accentBg);
+        // tandai tombol yang aktif
+        document
+          .querySelectorAll('#indicator-tabs button')
+          .forEach((b) => b.classList.toggle('active', b.dataset.ind === id));
+      }
+      document
+        .querySelectorAll('#indicator-tabs button')
+        .forEach((b) =>
+          b.addEventListener('click', () => setIndicator(b.dataset.ind)),
+        );
+      setIndicator('ppk'); // indikator default saat halaman dibuka
+
+      // =========================================================================
+      // (B) DEFINISI FIELD
+      // Tiap field: [nama_field, label_Indonesia, label_Inggris, opsi].
+      // opsi.neg = true  -> boleh negatif (default: tidak boleh)
+      // opsi.int = true  -> harus bilangan bulat (default: boleh desimal)
+      // =========================================================================
+      const FIELDS = {
+        'grp-profil': [
+          ['year', 'Tahun laporan', 'Reporting Year', { int: true }],
+          ['ipo_year', 'Tahun IPO', 'IPO Year', { int: true }],
+          [
+            'year_established',
+            'Tahun didirikan',
+            'Year Established',
+            { int: true },
+          ],
+          [
+            'parent_percent_owned',
+            'Kepemilikan induk (%)',
+            'Parent Percent Owned (%)',
+          ],
+          [
+            'pct_owned_all_institutions',
+            'Kepemilikan institusi (%)',
+            'Percent Owned - All Institutions (%)',
+          ],
+          [
+            'pct_owned_insiders',
+            'Kepemilikan insider (%)',
+            'Percent Owned - Insiders (%)',
+          ],
+        ],
+        'grp-neraca': [
+          ['total_assets', 'Total aset', 'Total Assets'],
+          ['total_liabilities', 'Total liabilitas', 'Total Liabilities'],
+          ['total_equity', 'Total ekuitas', 'Total Equity', { neg: true }],
+          ['total_current_assets', 'Aset lancar', 'Total Current Assets'],
+          [
+            'total_current_liabilities',
+            'Kewajiban lancar',
+            'Total Current Liabilities',
+          ],
+          ['total_debt', 'Total utang berbunga', 'Total Debt'],
+          ['inventory', 'Persediaan', 'Inventory'],
+          ['prepaid_exp', 'Biaya dibayar di muka', 'Prepaid Expenses'],
+          ['net_ppe', 'Aset tetap (net)', 'Net Property, Plant & Equipment'],
+          [
+            'cash_st',
+            'Kas & investasi jk. pendek',
+            'Cash & Short-term Investments',
+          ],
+          ['net_intangibles', 'Aset tak berwujud (net)', 'Net Intangibles'],
+          ['working_capital', 'Modal kerja', 'Working Capital', { neg: true }],
+        ],
+        'grp-pnl': [
+          ['total_revenue', 'Pendapatan', 'Total Revenue'],
+          ['cogs', 'Beban pokok penjualan', 'Cost of Goods Sold'],
+          [
+            'operating_income',
+            'Laba operasi',
+            'Operating Income',
+            { neg: true },
+          ],
+          ['ebitda', 'EBITDA', 'EBITDA', { neg: true }],
+          ['ebit', 'EBIT', 'EBIT', { neg: true }],
+          ['net_income', 'Laba bersih', 'Net Income', { neg: true }],
+        ],
+        'grp-cash': [
+          ['cfo', 'Arus kas operasi', 'Cash from Operations', { neg: true }],
+          [
+            'net_change_in_cash',
+            'Perubahan kas bersih',
+            'Net Change in Cash',
+            { neg: true },
+          ],
+          [
+            'market_cap',
+            'Kapitalisasi pasar (Rp juta)',
+            'Market Capitalization',
+          ],
+          [
+            'shares_outstanding',
+            'Jumlah saham beredar (lembar)',
+            'Common Shares Outstanding',
+            { int: true },
+          ],
+        ],
+        'grp-ratio': [
+          ['current_ratio', 'Current ratio (x)', 'Current Ratio'],
+          ['quick_ratio', 'Quick ratio (x)', 'Quick Ratio'],
+        ],
+        'grp-prev': [
+          [
+            'prev_total_revenue',
+            'Pendapatan tahun lalu',
+            'Total Revenue (prior year)',
+          ],
+          [
+            'prev_net_income',
+            'Laba bersih thn lalu',
+            'Net Income (prior year)',
+            { neg: true },
+          ],
+          [
+            'prev_total_assets',
+            'Total aset thn lalu',
+            'Total Assets (prior year)',
+          ],
+          [
+            'prev_total_equity',
+            'Total ekuitas thn lalu',
+            'Total Equity (prior year)',
+            { neg: true },
+          ],
+          [
+            'prev_cfo',
+            'Arus kas operasi thn lalu',
+            'Cash from Operations (prior year)',
+            { neg: true },
+          ],
+        ],
+      };
+
+      // Buat elemen input untuk tiap field.
+      // type=number otomatis menolak huruf. min="0" menolak negatif. step="1" menolak desimal.
+      for (const [gid, fields] of Object.entries(FIELDS)) {
+        const box = document.getElementById(gid);
+        for (const [key, idLabel, enLabel, opts = {}] of fields) {
+          const min = opts.neg ? '' : 'min="0"'; // (C) validasi: non-negatif kecuali ditandai neg
+          const step = opts.int ? 'step="1"' : 'step="any"'; // (C) validasi: bilangan bulat vs desimal
+          const div = document.createElement('div');
+          div.innerHTML =
+            `<label>${idLabel}<br><em class="en">${enLabel}</em></label>` +
+            `<input type="number" name="${key}" ${min} ${step}>`;
+          box.appendChild(div);
+        }
+      }
+
+      // Ambil daftar sektor dari server untuk mengisi dropdown.
+      fetch('/api/meta')
+        .then((r) => r.json())
+        .then((m) => {
+          const sec = document.getElementById('industry_group');
+          sec.add(new Option('— pilih sektor —', ''));
+          m.industry_groups.forEach((g) => sec.add(new Option(g, g)));
+        });
+
+      // =========================================================================
+      // (D) DATA CONTOH untuk tombol demo.
+      // Untuk menambah perusahaan: salin satu blok, ganti nama key dan angkanya.
+      // "_indicator" menentukan tab indikator mana yang otomatis dipilih.
+      // =========================================================================
+      const SAMPLES = {
+        'AALI 2023': {
+          _indicator: 'ppk',
+          industry_group: 'Food, Beverage and Tobacco',
+          year: 2023,
+          ipo_year: 1997,
+          year_established: 1988,
+          parent_percent_owned: 79.68,
+          pct_owned_all_institutions: 2.1,
+          total_assets: 28846243,
+          total_liabilities: 6280237,
+          total_equity: 22566006,
+          total_current_assets: 7118202,
+          total_current_liabilities: 3882141,
+          total_debt: 4005052,
+          inventory: 3122454,
+          net_ppe: 18105649,
+          cash_st: 2089508,
+          working_capital: 3236061,
+          total_revenue: 20745473,
+          cogs: 17950652,
+          operating_income: 1672092,
+          ebitda: 3007949,
+          ebit: 1672092,
+          net_income: 1088170,
+          cfo: 2538738,
+          net_change_in_cash: 469892,
+          market_cap: 13520935.54,
+          shares_outstanding: 1924688333,
+          current_ratio: 1.834,
+          quick_ratio: 0.765,
+          prev_total_revenue: 21828591,
+          prev_net_income: 1792050,
+          prev_total_assets: 29249340,
+          prev_total_equity: 22243221,
+          prev_cfo: 1835397,
+        },
+      };
+      function fillForm(name) {
+        const data = SAMPLES[name];
+        if (!data) return;
+        if (data._indicator) setIndicator(data._indicator); // pindahkan tab indikator
+        const form = document.getElementById('form');
+        for (const [k, v] of Object.entries(data)) {
+          if (k === '_indicator') continue;
+          if (form.elements[k]) form.elements[k].value = v; // isi field bila ada
+        }
+      }
+
+      // =========================================================================
+      // (E) SUBMIT
+      // =========================================================================
+      const PILL = {
+        'Relatif sehat': 'green',
+        'Perlu diwaspadai': 'amber',
+        'Berisiko mengalami financial distress': 'red',
+      };
+      const form = document.getElementById('form');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        // (C) Validasi bawaan browser: cek semua aturan min/step (negatif, desimal, huruf).
+        // Bila ada yang melanggar, browser menampilkan pesan dan kita batalkan submit.
+        if (!form.reportValidity()) return;
+
+        const btn = document.getElementById('submit');
+        const err = document.getElementById('err');
+        err.style.display = 'none';
+        btn.disabled = true;
+        btn.textContent = 'Menghitung…';
+
+        // Kumpulkan isian. Indikator diambil dari tab (currentIndicator), bukan dari form.
+        const payload = { indicator: currentIndicator };
+        new FormData(form).forEach((v, k) => {
+          if (v === '') return; // field kosong -> tidak dikirim (jadi NaN di server)
+          payload[k] = k === 'industry_group' ? v : Number(v); // selain sektor, kirim sebagai angka
+        });
+
+        try {
+          const res = await fetch('/api/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          if (!res.ok)
+            throw new Error((await res.json()).detail || 'Permintaan gagal');
+          render(await res.json());
+        } catch (ex) {
+          err.textContent = 'Gagal memproses: ' + ex.message;
+          err.style.display = 'block';
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Prediksi risiko';
+        }
+      });
+
+      // =========================================================================
+      // (F) TAMPILKAN HASIL
+      // =========================================================================
+      function render(d) {
+        const r = document.getElementById('result');
+        document.getElementById('verdict-label').textContent = d.distress_2y
+          ? 'Diprediksi berisiko distress'
+          : 'Diprediksi tidak distress';
+        const pill = document.getElementById('verdict-pill');
+        pill.textContent = d.risk_level;
+        pill.className = 'pill ' + (PILL[d.risk_level] || 'amber');
+        document.getElementById('verdict-sub').textContent =
+          `Indikator: ${d.indicator_label}. Prediksi untuk dua tahun ke depan.`;
+
+        // Batang risiko: skala dinamis agar probabilitas & batas keputusan sama-sama terlihat,
+        // karena kedua angka biasanya kecil (akibat kelas yang imbalanced).
+        const span = Math.max(d.probability, d.threshold) * 1.6 || 1;
+        const fill = document.getElementById('gauge-fill');
+        fill.style.width = Math.min(100, (d.probability / span) * 100) + '%';
+        fill.style.background = d.distress_2y
+          ? 'var(--red)'
+          : d.risk_level === 'Perlu diwaspadai'
+            ? 'var(--amber)'
+            : 'var(--accent)';
+        document.getElementById('gauge-thr').style.left =
+          (d.threshold / span) * 100 + '%';
+
+        document.getElementById('num-prob').textContent =
+          (d.probability * 100).toFixed(2) + '%';
+        document.getElementById('num-thr').textContent =
+          (d.threshold * 100).toFixed(2) + '%';
+        document.getElementById('num-model').textContent = d.model_name;
+
+        const notes = document.getElementById('notes');
+        if (!d.commentary.length) {
+          notes.innerHTML = `<h3>Catatan Kondisi Keuangan</h3><div class="ok">Tidak ada pos dominan yang berada di luar rentang sehat.</div>`;
+        } else {
+          notes.innerHTML =
+            `<h3>Catatan Kondisi Keuangan (${d.commentary.length})</h3>` +
+            d.commentary
+              .map(
+                (c) => `
+      <div class="note ${c.severity}">
+        <div class="top"><span class="name">${c.label}</span>
+          <span class="val">${c.value} · sehat ${c.healthy_range}</span></div>
+        <div class="msg">${c.message}</div>
+        <div class="sug">${c.suggestion}</div>
+      </div>`,
+              )
+              .join('');
+        }
+        r.style.display = 'block';
+        r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    </script>
+  </body>
+</html>
