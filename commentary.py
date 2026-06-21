@@ -53,6 +53,15 @@ def _is_nan(x) -> bool:
 def _fmt(x) -> str:
     return f"{x:.3f}"
 
+# Rasio yang nilainya pecahan dan lebih wajar ditampilkan sebagai persen.
+PERCENT_RATIOS = {"Sales_growth", "NI_growth", "TA_growth", "Equity_growth", "CFO_growth"}
+
+def _fmt_val(name, x) -> str:
+    """Persen untuk rasio pertumbuhan, desimal biasa untuk sisanya."""
+    if name in PERCENT_RATIOS:
+        return f"{x * 100:.1f}%"
+    return f"{x:.3f}"
+
 
 def generate_commentary(indicator: str, ratios: dict, stats: dict, max_items: int = 8) -> list:
     """
@@ -77,23 +86,23 @@ def generate_commentary(indicator: str, ratios: dict, stats: dict, max_items: in
             if v >= p25:
                 continue  # sehat
             distance = (p25 - v) / iqr
-            posisi = f"di bawah kuartil bawah perusahaan sehat ({_fmt(p25)})"
+            posisi = f"di bawah kuartil bawah perusahaan sehat ({_fmt_val(name, p25)})"
         else:  # low_good
             if v <= p75:
                 continue  # sehat
             distance = (v - p75) / iqr
-            posisi = f"di atas kuartil atas perusahaan sehat ({_fmt(p75)})"
+            posisi = f"di atas kuartil atas perusahaan sehat ({_fmt_val(name, p75)})"
 
         severity = "tinggi" if distance >= 1.0 else ("sedang" if distance >= 0.4 else "ringan")
 
         flagged.append({
             "ratio": name,
             "label": item["label"],
-            "value": round(float(v), 4),
-            "healthy_range": f"{_fmt(p25)} – {_fmt(p75)}",
+            "value": _fmt_val(name, v), # round(float(v), 4),
+            "healthy_range": f"{_fmt_val(name, p25)} – {_fmt_val(name, p75)}",
             "shap_rank": item["shap_rank"],
             "severity": severity,
-            "message": f"{item['label']} ({_fmt(v)}) {posisi}.",
+            "message": f"{item['label']} ({_fmt_val(name, v)}) {posisi}.",
             "suggestion": ADVICE.get(name, GENERIC[direction]),
         })
 
