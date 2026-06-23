@@ -271,6 +271,51 @@
         font-size: 19px;
         font-weight: 600;
       }
+      /* kotak Tingkat Risiko: angka besar, warna mengikuti tingkat risiko */
+      .risk-box {
+        margin: 16px 0 6px;
+        padding: 16px 18px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: #fafbfc;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .risk-box .risk-cap {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+      }
+      .risk-box .risk-val {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 34px;
+        font-weight: 600;
+        line-height: 1.1;
+      }
+      .risk-box .risk-sub {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .risk-box.green {
+        background: var(--green-bg);
+      }
+      .risk-box.green .risk-val {
+        color: var(--green);
+      }
+      .risk-box.amber {
+        background: var(--amber-bg);
+      }
+      .risk-box.amber .risk-val {
+        color: var(--amber);
+      }
+      .risk-box.red {
+        background: var(--red-bg);
+      }
+      .risk-box.red .risk-val {
+        color: var(--red);
+      }
       .notes h3 {
         font-size: 14px;
         text-transform: uppercase;
@@ -422,6 +467,11 @@
           <span class="pill" id="verdict-pill"></span>
         </div>
         <p class="sub" id="verdict-sub"></p>
+        <div class="risk-box" id="risk-box">
+          <span class="risk-cap">Tingkat Risiko</span>
+          <b class="risk-val" id="risk-val"></b>
+          <span class="risk-sub" id="risk-sub"></span>
+        </div>
         <div class="gauge">
           <div class="track">
             <div class="fill" id="gauge-fill"></div>
@@ -429,7 +479,6 @@
           </div>
         </div>
         <div class="nums">
-          <div><span>Probabilitas distress</span><b id="num-prob"></b></div>
           <div><span>Batas Keputusan</span><b id="num-thr"></b></div>
           <div><span>Model</span><b id="num-model"></b></div>
         </div>
@@ -752,7 +801,7 @@
       function fillForm(name) {
         const data = SAMPLES[name];
         if (!data) return;
-        if (data._indicator) setIndicator(data._indicator);
+        // catatan: indikator TIDAK diubah; biarkan pilihan indikator user apa adanya.
         const form = document.getElementById('form');
         for (const [k, v] of Object.entries(data)) {
           if (k === '_indicator') continue;
@@ -831,7 +880,7 @@
         document.getElementById('verdict-sub').textContent =
           `Indikator: ${d.indicator_label}. Prediksi untuk dua tahun ke depan.`;
 
-        const span = Math.max(d.probability, d.threshold) * 1.6 || 1;
+        const span = Math.max(d.probability, d.threshold) * 1.3 || 1;
         const fill = document.getElementById('gauge-fill');
         fill.style.width = Math.min(100, (d.probability / span) * 100) + '%';
         fill.style.background = d.distress_2y
@@ -842,8 +891,17 @@
         document.getElementById('gauge-thr').style.left =
           (d.threshold / span) * 100 + '%';
 
-        document.getElementById('num-prob').textContent =
-          (d.probability * 100).toFixed(2) + '%';
+        // Tingkat Risiko = probabilitas relatif terhadap batas keputusan.
+        // 100% berarti tepat menyentuh batas; di atas 100% berarti sudah melewatinya.
+        const ratioPct =
+          d.threshold > 0 ? (d.probability / d.threshold) * 100 : 0;
+        const rbox = document.getElementById('risk-box');
+        rbox.className = 'risk-box ' + (PILL[d.risk_level] || 'amber');
+        document.getElementById('risk-val').textContent =
+          ratioPct.toFixed(1) + '%';
+        document.getElementById('risk-sub').textContent =
+          `probabilitas ${(d.probability * 100).toFixed(2)}% terhadap batas ${(d.threshold * 100).toFixed(2)}%`;
+
         document.getElementById('num-thr').textContent =
           (d.threshold * 100).toFixed(2) + '%';
         document.getElementById('num-model').textContent = d.model_name;
