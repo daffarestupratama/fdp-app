@@ -153,9 +153,16 @@
         gap: 8px;
         flex-wrap: wrap;
       }
-      .samples span {
+      .samples .lbl {
+        flex-basis: 100%;
         font-size: 13px;
         color: var(--muted);
+        margin-bottom: 2px;
+      }
+      .divider {
+        border: none;
+        border-top: 1px solid var(--line);
+        margin: 4px 0 18px;
       }
       .btn {
         appearance: none;
@@ -445,16 +452,52 @@
           </fieldset>
 
           <div class="samples">
-            <span>Isi contoh:</span>
+            <div class="lbl">Isi contoh:</div>
             <button
               type="button"
               class="btn sm"
-              onclick="fillForm('AALI 2023')"
+              onclick="fillForm('PPK - BCAP 2023 (distress)')"
             >
-              AALI 2023
+              PPK - BCAP 2023 (distress)
+            </button>
+            <button
+              type="button"
+              class="btn sm"
+              onclick="fillForm('PPK - MLBI 2023 (sehat)')"
+            >
+              PPK - MLBI 2023 (sehat)
+            </button>
+            <button
+              type="button"
+              class="btn sm"
+              onclick="fillForm('Negeq - KBLV 2020 (distress)')"
+            >
+              Negeq - KBLV 2020 (distress)
+            </button>
+            <button
+              type="button"
+              class="btn sm"
+              onclick="fillForm('Negeq - SMAR 2022 (sehat)')"
+            >
+              Negeq - SMAR 2022 (sehat)
+            </button>
+            <button
+              type="button"
+              class="btn sm"
+              onclick="fillForm('Conloss - TRUE 2022 (distress)')"
+            >
+              Conloss - TRUE 2022 (distress)
+            </button>
+            <button
+              type="button"
+              class="btn sm"
+              onclick="fillForm('Conloss - CEKA 2020 (sehat)')"
+            >
+              Conloss - CEKA 2020 (sehat)
             </button>
           </div>
 
+          <hr class="divider" />
           <button class="btn" type="submit" id="submit">Prediksi risiko</button>
           <div class="err" id="err"></div>
         </div>
@@ -695,29 +738,29 @@
         'grp-prev': [
           [
             'prev_total_revenue',
-            'Pendapatan thn lalu',
+            'Pendapatan tahun lalu',
             'Total Revenue (prior year)',
           ],
           [
             'prev_net_income',
-            'Laba bersih thn lalu',
+            'Laba bersih tahun lalu',
             'Net Income (prior year)',
             { neg: true },
           ],
           [
             'prev_total_assets',
-            'Total aset thn lalu',
+            'Total aset tahun lalu',
             'Total Assets (prior year)',
           ],
           [
             'prev_total_equity',
-            'Total ekuitas thn lalu',
+            'Total ekuitas tahun lalu',
             'Total Equity (prior year)',
             { neg: true },
           ],
           [
             'prev_cfo',
-            'Arus kas operasi thn lalu',
+            'Arus kas operasi tahun lalu',
             'Cash from Operations (prior year)',
             { neg: true },
           ],
@@ -761,48 +804,232 @@
       // (D) DATA CONTOH untuk tombol demo (angka polos; ditampilkan terformat).
       // =========================================================================
       const SAMPLES = {
-        'AALI 2023': {
-          _indicator: 'ppk',
-          industry_group: 'Food, Beverage and Tobacco',
+        'PPK - BCAP 2023 (distress)': {
           year: 2023,
-          ipo_year: 1997,
-          year_established: 1988,
-          parent_percent_owned: 79.68,
-          pct_owned_all_institutions: 2.1,
-          total_assets: 28846243,
-          total_liabilities: 6280237,
-          total_equity: 22566006,
-          total_current_assets: 7118202,
-          total_current_liabilities: 3882141,
-          total_debt: 4005052,
-          inventory: 3122454,
-          net_ppe: 18105649,
-          cash_st: 2089508,
-          working_capital: 3236061,
-          total_revenue: 20745473,
-          cogs: 17950652,
-          operating_income: 1672092,
-          ebitda: 3007949,
-          ebit: 1672092,
-          net_income: 1088170,
-          cfo: 2538738,
-          net_change_in_cash: 469892,
-          market_cap: 13520935.54,
-          shares_outstanding: 1924688333,
-          current_ratio: 1.834,
-          quick_ratio: 0.765,
-          prev_total_revenue: 21828591,
-          prev_net_income: 1792050,
-          prev_total_assets: 29249340,
-          prev_total_equity: 22243221,
-          prev_cfo: 1835397,
+          total_assets: 25863812.0,
+          total_liabilities: 18860818.0,
+          total_equity: 7002994.0,
+          total_current_assets: 21186047.0,
+          total_current_liabilities: 3936557.0,
+          total_debt: 2247392.0,
+          net_ppe: 1138994.0,
+          cash_st: 8092501.0,
+          net_intangibles: 206987.0,
+          working_capital: 17249490.0,
+          total_revenue: 1892161.0,
+          cogs: 363988.0,
+          operating_income: 299502.0,
+          net_income: 77585.0,
+          cfo: 39872.0,
+          net_change_in_cash: 443453.0,
+          market_cap: 2130942.54635,
+          shares_outstanding: 42618850927.0,
+          current_ratio: 5.382,
+          quick_ratio: 5.316,
+          industry_group: 'Financial Services',
+          ipo_year: 2001,
+          year_established: 1989,
+          parent_percent_owned: 50.480000000000004,
+          pct_owned_all_institutions: 6.53,
+          pct_owned_insiders: 0.13,
+          prev_total_revenue: 1937497.0,
+          prev_net_income: 148008.0,
+          prev_total_assets: 24306227.0,
+          prev_total_equity: 6200813.0,
+          prev_cfo: 923727.0,
+          _indicator: 'ppk',
+        },
+        'PPK - MLBI 2023 (sehat)': {
+          year: 2023,
+          total_assets: 3407442.0,
+          total_liabilities: 2015987.0,
+          total_equity: 1391455.0,
+          total_current_assets: 1733206.0,
+          total_current_liabilities: 1870445.0,
+          total_debt: 389080.0,
+          inventory: 209196.0,
+          prepaid_exp: 44186.0,
+          net_ppe: 1478762.0,
+          cash_st: 798000.0,
+          working_capital: -137239.0,
+          total_revenue: 3322282.0,
+          cogs: 1302154.0,
+          operating_income: 1411296.0,
+          ebitda: 1692621.0,
+          ebit: 1411296.0,
+          net_income: 1066467.0,
+          cfo: 1018862.0,
+          net_change_in_cash: -44329.0,
+          market_cap: 16329250.0,
+          shares_outstanding: 2107000000.0,
+          current_ratio: 0.927,
+          quick_ratio: 0.778,
+          industry_group: 'Food, Beverage and Tobacco',
+          ipo_year: 1981,
+          year_established: 1929,
+          parent_percent_owned: 81.78,
+          pct_owned_all_institutions: 1.26,
+          prev_total_revenue: 3114907.0,
+          prev_net_income: 924906.0,
+          prev_total_assets: 3374502.0,
+          prev_total_equity: 1073275.0,
+          prev_cfo: 1490060.0,
+          _indicator: 'ppk',
+        },
+        'Negeq - KBLV 2020 (distress)': {
+          year: 2020,
+          total_assets: 6606047.0,
+          total_liabilities: 5680226.0,
+          total_equity: 925821.0,
+          total_current_assets: 133685.0,
+          total_current_liabilities: 4920800.0,
+          total_debt: 1950639.0,
+          inventory: 0.0,
+          prepaid_exp: 7928.0,
+          net_ppe: 151790.0,
+          cash_st: 93714.0,
+          net_intangibles: 97.0,
+          working_capital: -4787115.0,
+          total_revenue: 188697.0,
+          cogs: 108325.0,
+          operating_income: -50014.0,
+          ebitda: -1310.0,
+          ebit: -50014.0,
+          net_income: -21478.0,
+          cfo: -244768.0,
+          net_change_in_cash: 17161.0,
+          market_cap: 714288.84187,
+          shares_outstanding: 1742167907.0,
+          current_ratio: 0.027,
+          quick_ratio: 0.025,
+          industry_group: 'Telecommunication Services',
+          ipo_year: 2000,
+          year_established: 1994,
+          parent_percent_owned: 56.02,
+          prev_total_revenue: 248909.0,
+          prev_net_income: -256057.0,
+          prev_total_assets: 7174495.0,
+          prev_total_equity: 945741.0,
+          prev_cfo: -311897.0,
+          _indicator: 'negeq',
+        },
+        'Negeq - SMAR 2022 (sehat)': {
+          year: 2022,
+          total_assets: 42600814.0,
+          total_liabilities: 23353011.0,
+          total_equity: 19247803.0,
+          total_current_assets: 23708820.0,
+          total_current_liabilities: 12104564.0,
+          total_debt: 18202904.0,
+          inventory: 8655438.0,
+          prepaid_exp: 12898.0,
+          net_ppe: 13714112.0,
+          cash_st: 2479597.0,
+          working_capital: 11604256.0,
+          total_revenue: 75045559.0,
+          cogs: 61858625.0,
+          operating_income: 6573747.0,
+          ebitda: 7624799.0,
+          ebit: 6573747.0,
+          net_income: 5504956.0,
+          cfo: 4283273.0,
+          net_change_in_cash: -237626.0,
+          market_cap: 14217357.1617,
+          shares_outstanding: 2872193366.0,
+          current_ratio: 1.959,
+          quick_ratio: 0.919,
+          industry_group: 'Food, Beverage and Tobacco',
+          ipo_year: 1992,
+          year_established: 1962,
+          parent_percent_owned: 92.39,
+          pct_owned_all_institutions: 0.01,
+          prev_total_revenue: 57004234.0,
+          prev_net_income: 2829418.0,
+          prev_total_assets: 40345003.0,
+          prev_total_equity: 14417829.0,
+          prev_cfo: 650500.0,
+          _indicator: 'negeq',
+        },
+        'Conloss - TRUE 2022 (distress)': {
+          year: 2022,
+          total_assets: 804466.849,
+          total_liabilities: 467184.539,
+          total_equity: 337282.31,
+          total_current_assets: 577506.584,
+          total_current_liabilities: 221816.481,
+          total_debt: 339457.709,
+          inventory: 466775.997,
+          prepaid_exp: 11951.124,
+          net_ppe: 27204.009,
+          cash_st: 6317.532,
+          working_capital: 355690.103,
+          total_revenue: 210537.268,
+          cogs: 176776.02,
+          operating_income: -13115.043,
+          ebitda: -11001.124,
+          ebit: -13115.043,
+          net_income: -17331.088,
+          cfo: 42075.243,
+          net_change_in_cash: -20687.792,
+          market_cap: 378544.531,
+          shares_outstanding: 7570890620.0,
+          current_ratio: 2.604,
+          quick_ratio: 0.333,
+          industry_group: 'Real Estate Management and Development',
+          ipo_year: 2021,
+          year_established: 2013,
+          parent_percent_owned: 52.83,
+          pct_owned_insiders: 6.51,
+          _indicator: 'conloss',
+        },
+        'Conloss - CEKA 2020 (sehat)': {
+          year: 2020,
+          total_assets: 1566673.828,
+          total_liabilities: 305958.833,
+          total_equity: 1260714.995,
+          total_current_assets: 1266586.466,
+          total_current_liabilities: 271641.006,
+          total_debt: 0.0,
+          inventory: 351602.533,
+          prepaid_exp: 1730.472,
+          net_ppe: 204186.01,
+          cash_st: 441806.178,
+          working_capital: 994945.46,
+          total_revenue: 3634297.274,
+          cogs: 3303779.593,
+          operating_income: 207512.517,
+          ebitda: 231990.745,
+          ebit: 207512.517,
+          net_income: 181812.594,
+          cfo: 171295.45,
+          net_change_in_cash: 75427.41,
+          market_cap: 1062075.0,
+          shares_outstanding: 595000000.0,
+          current_ratio: 4.663,
+          quick_ratio: 3.362,
+          industry_group: 'Food, Beverage and Tobacco',
+          ipo_year: 1996,
+          year_established: 1968,
+          parent_percent_owned: 87.02,
+          prev_total_revenue: 3120937.099,
+          prev_net_income: 215459.2,
+          prev_total_assets: 1393079.542,
+          prev_total_equity: 1131294.697,
+          prev_cfo: 453148.0,
+          _indicator: 'conloss',
         },
       };
+
       function fillForm(name) {
         const data = SAMPLES[name];
         if (!data) return;
-        // catatan: indikator TIDAK diubah; biarkan pilihan indikator user apa adanya.
         const form = document.getElementById('form');
+        // kosongkan dulu SEMUA field agar field yang kosong di contoh ini
+        // tidak menyisakan nilai dari contoh sebelumnya
+        Array.from(form.elements).forEach((el) => {
+          if (el.name) el.value = '';
+        });
+        if (data._indicator) setIndicator(data._indicator); // tiap contoh terikat indikatornya
         for (const [k, v] of Object.entries(data)) {
           if (k === '_indicator') continue;
           if (!form.elements[k]) continue;
