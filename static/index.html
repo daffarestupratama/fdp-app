@@ -10,8 +10,6 @@
       rel="stylesheet"
     />
     <style>
-      /* --accent dst. adalah variabel TEMA. Nilainya diganti oleh JS setiap kali
-     user memilih indikator berbeda, sehingga seluruh warna ikut berubah. */
       :root {
         --ink: #16202e;
         --muted: #5b6675;
@@ -20,7 +18,7 @@
         --surface: #ffffff;
         --accent: #0d6e66;
         --accent-d: #0a514b;
-        --accent-bg: #e6f3f1; /* default: tema ppk */
+        --accent-bg: #e6f3f1;
         --green: #15803d;
         --green-bg: #e8f5ec;
         --amber: #b45309;
@@ -55,8 +53,6 @@
         font-size: 15px;
         max-width: 64ch;
       }
-
-      /* ----- Tombol pemilih indikator (3 berderet, di paling atas) ----- */
       .indicator-tabs {
         display: flex;
         gap: 10px;
@@ -85,7 +81,6 @@
         background: var(--accent-bg);
         box-shadow: inset 0 0 0 2px var(--accent);
       }
-
       .card {
         background: var(--surface);
         border: 1px solid var(--line);
@@ -118,7 +113,6 @@
         color: var(--muted);
         margin-bottom: 5px;
       }
-      /* nama akun versi Inggris, dicetak miring di bawah versi Indonesia */
       label .en {
         font-style: italic;
         font-weight: 400;
@@ -142,7 +136,8 @@
         border-color: var(--accent);
         box-shadow: 0 0 0 3px var(--accent-bg);
       }
-      input[type='number'] {
+      /* field angka memakai font monospace agar titik ribuan rapi & sejajar */
+      input {
         font-family: 'IBM Plex Mono', monospace;
         font-feature-settings: 'tnum';
       }
@@ -151,7 +146,6 @@
         color: #8a93a0;
         margin: -6px 0 10px;
       }
-
       .samples {
         margin: 6px 0 16px;
         display: flex;
@@ -186,8 +180,6 @@
         padding: 8px 14px;
         font-size: 13px;
       }
-
-      /* ----- Panel hasil ----- */
       #result {
         display: none;
       }
@@ -251,7 +243,6 @@
         width: 2px;
         background: var(--ink);
       }
-      /* label di atas garis ambang */
       .gauge .thr::after {
         content: 'Batas Keputusan';
         position: absolute;
@@ -355,7 +346,6 @@
         </p>
       </header>
 
-      <!-- (1) PEMILIH INDIKATOR: 3 tombol di paling atas. Tema warna berubah saat diklik. -->
       <div class="indicator-tabs" id="indicator-tabs">
         <button type="button" data-ind="ppk">Papan Pemantauan Khusus</button>
         <button type="button" data-ind="negeq">Ekuitas Negatif</button>
@@ -364,7 +354,6 @@
 
       <form id="form">
         <div class="card">
-          <!-- (2) PROFIL: indikator sudah dipindah ke atas, jadi di sini tinggal sektor + identitas -->
           <fieldset>
             <legend>Profil</legend>
             <div class="grid">
@@ -376,7 +365,6 @@
                 >
                 <select id="industry_group" name="industry_group"></select>
               </div>
-              <!-- field profil numerik lain dibuat otomatis oleh JS di bawah -->
               <div class="grid" id="grp-profil" style="display: contents"></div>
             </div>
           </fieldset>
@@ -396,11 +384,10 @@
             <div class="grid" id="grp-cash"></div>
           </fieldset>
 
-          <!-- (3) RASIO OPSIONAL: kalau diisi dipakai apa adanya; kalau kosong dihitung server -->
           <fieldset>
             <legend>Rasio (opsional)</legend>
             <p class="note-line">
-              Isi bila punya angka resminya (mis. dari S&amp;P). Bila
+              Isi bila kamu punya angka resminya (mis. dari S&amp;P). Bila
               dikosongkan, dihitung otomatis dari komponen di atas. Quick ratio
               hitungan adalah aproksimasi dan bisa sedikit berbeda dari S&amp;P.
             </p>
@@ -412,7 +399,6 @@
             <div class="grid" id="grp-prev"></div>
           </fieldset>
 
-          <!-- (4) TOMBOL DEMO: mengisi form otomatis dengan data contoh saat presentasi -->
           <div class="samples">
             <span>Isi contoh:</span>
             <button
@@ -422,7 +408,6 @@
             >
               AALI 2023
             </button>
-            <!-- tambah tombol perusahaan lain di sini dengan pola yang sama -->
           </div>
 
           <button class="btn" type="submit" id="submit">Prediksi risiko</button>
@@ -455,16 +440,13 @@
     <script>
       // =========================================================================
       // (A) TEMA WARNA PER INDIKATOR
-      // Tiap indikator punya satu set warna. setIndicator() menukar nilai variabel
-      // CSS (--accent dst.) di root sehingga seluruh halaman berganti warna.
       // =========================================================================
       const THEMES = {
-        ppk: { accent: '#0d6e66', accentD: '#0a514b', accentBg: '#e6f3f1' }, // teal
-        negeq: { accent: '#3b4cca', accentD: '#2a37a0', accentBg: '#eaecfb' }, // indigo
-        conloss: { accent: '#b4530c', accentD: '#8a3f08', accentBg: '#fcefe2' }, // amber
+        ppk: { accent: '#0d6e66', accentD: '#0a514b', accentBg: '#e6f3f1' },
+        negeq: { accent: '#3b4cca', accentD: '#2a37a0', accentBg: '#eaecfb' },
+        conloss: { accent: '#b4530c', accentD: '#8a3f08', accentBg: '#fcefe2' },
       };
-      let currentIndicator = null; // indikator yang sedang dipilih
-
+      let currentIndicator = null;
       function setIndicator(id) {
         currentIndicator = id;
         const t = THEMES[id],
@@ -472,7 +454,6 @@
         root.setProperty('--accent', t.accent);
         root.setProperty('--accent-d', t.accentD);
         root.setProperty('--accent-bg', t.accentBg);
-        // tandai tombol yang aktif
         document
           .querySelectorAll('#indicator-tabs button')
           .forEach((b) => b.classList.toggle('active', b.dataset.ind === id));
@@ -482,14 +463,101 @@
         .forEach((b) =>
           b.addEventListener('click', () => setIndicator(b.dataset.ind)),
         );
-      setIndicator('ppk'); // indikator default saat halaman dibuka
+      setIndicator('ppk');
 
       // =========================================================================
-      // (B) DEFINISI FIELD
-      // Tiap field: [nama_field, label_Indonesia, label_Inggris, opsi].
-      // opsi.neg = true  -> boleh negatif (default: tidak boleh)
-      // opsi.int = true  -> harus bilangan bulat (default: boleh desimal)
+      // (B) FORMAT ANGKA GAYA INDONESIA
+      // Titik (.) = pemisah ribuan (otomatis), koma (,) = pemisah desimal.
+      // opts.thousands -> sisipkan titik ribuan ; opts.int -> tanpa desimal ;
+      // opts.neg -> boleh diawali minus.
       // =========================================================================
+
+      // Susun ulang teks menjadi format bertitik-ribuan & berkoma-desimal.
+      function formatValue(raw, opts) {
+        const { thousands, int, neg } = opts;
+        let sign = '';
+        if (neg && raw.trim().startsWith('-')) sign = '-';
+        let s = raw.replace(/[^\d,]/g, ''); // buang titik (kita sisipkan sendiri), huruf, minus berlebih
+        if (int) {
+          s = s.replace(/,/g, ''); // bilangan bulat: tidak ada desimal
+        } else {
+          const i = s.indexOf(','); // hanya koma pertama yang dianggap desimal
+          if (i !== -1)
+            s =
+              s.slice(0, i).replace(/,/g, '') +
+              ',' +
+              s.slice(i + 1).replace(/,/g, '');
+        }
+        let [ip, dp] = s.split(',');
+        ip = ip || '';
+        if (thousands && ip) ip = ip.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // sisip titik tiap 3 digit
+        let out = sign + ip;
+        if (!int && s.includes(',')) out += ',' + (dp || '');
+        return out;
+      }
+
+      // Ubah teks tampilan ("13.520.935,54") -> angka polos (13520935.54) untuk dikirim ke server.
+      function parseValue(display) {
+        if (display.trim() === '') return null;
+        const n = Number(display.replace(/\./g, '').replace(',', '.'));
+        return isNaN(n) ? null : n;
+      }
+
+      // Ubah angka polos -> teks tampilan, untuk tombol contoh (autofill).
+      function numberToDisplay(num, opts) {
+        if (num === null || num === undefined || num === '') return '';
+        let [ip, dp] = String(num).split('.');
+        let sign = '';
+        if (ip.startsWith('-')) {
+          sign = '-';
+          ip = ip.slice(1);
+        }
+        if (opts.thousands) ip = ip.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        let out = sign + ip;
+        if (dp && !opts.int) out += ',' + dp;
+        return out;
+      }
+
+      // Hitung jumlah karakter "penting" (digit/koma/minus) sebelum posisi kursor.
+      // Titik ribuan tidak dihitung agar kursor tetap relatif terhadap angka.
+      function countSig(value, caret) {
+        let c = 0;
+        for (let i = 0; i < caret; i++) if (/[\d,-]/.test(value[i])) c++;
+        return c;
+      }
+      // Cari posisi kursor pada teks baru setelah sejumlah n karakter penting.
+      function posFromSig(value, n) {
+        let i = 0,
+          seen = 0;
+        for (; i < value.length && seen < n; i++)
+          if (/[\d,-]/.test(value[i])) seen++;
+        return i;
+      }
+
+      // Pasang pemformat ke sebuah input: tiap kali diketik, langsung diformat ulang
+      // sambil menjaga posisi kursor.
+      function attachFormatter(input, opts) {
+        input.addEventListener('input', () => {
+          const before = countSig(input.value, input.selectionStart);
+          input.value = formatValue(input.value, opts);
+          const pos = posFromSig(input.value, before);
+          input.setSelectionRange(pos, pos);
+        });
+      }
+
+      // =========================================================================
+      // (C) DEFINISI FIELD
+      // [nama_field, label_ID, label_EN, opts]. Grup uang otomatis dapat titik ribuan.
+      // opts.neg=boleh negatif ; opts.int=bilangan bulat (tanpa koma).
+      // =========================================================================
+      const MONEY_GROUPS = new Set([
+        'grp-neraca',
+        'grp-pnl',
+        'grp-cash',
+        'grp-prev',
+      ]); // dapat titik ribuan
+      const FIELD_OPTS = {}; // peta nama_field -> opts, dipakai autofill & submit
+
       const FIELDS = {
         'grp-profil': [
           ['year', 'Tahun laporan', 'Reporting Year', { int: true }],
@@ -578,7 +646,7 @@
         'grp-prev': [
           [
             'prev_total_revenue',
-            'Pendapatan tahun lalu',
+            'Pendapatan thn lalu',
             'Total Revenue (prior year)',
           ],
           [
@@ -607,22 +675,31 @@
         ],
       };
 
-      // Buat elemen input untuk tiap field.
-      // type=number otomatis menolak huruf. min="0" menolak negatif. step="1" menolak desimal.
+      // Bangun input untuk tiap field, lengkap dengan pemformat angka.
       for (const [gid, fields] of Object.entries(FIELDS)) {
         const box = document.getElementById(gid);
-        for (const [key, idLabel, enLabel, opts = {}] of fields) {
-          const min = opts.neg ? '' : 'min="0"'; // (C) validasi: non-negatif kecuali ditandai neg
-          const step = opts.int ? 'step="1"' : 'step="any"'; // (C) validasi: bilangan bulat vs desimal
-          const div = document.createElement('div');
-          div.innerHTML =
-            `<label>${idLabel}<br><em class="en">${enLabel}</em></label>` +
-            `<input type="number" name="${key}" ${min} ${step}>`;
-          box.appendChild(div);
+        for (const [key, idLabel, enLabel, raw = {}] of fields) {
+          // grup uang otomatis berpemisah ribuan kecuali ditandai lain
+          const opts = { thousands: MONEY_GROUPS.has(gid), ...raw };
+          FIELD_OPTS[key] = opts;
+
+          const wrap = document.createElement('div');
+          const lab = document.createElement('label');
+          lab.innerHTML = `${idLabel}<br><em class="en">${enLabel}</em>`;
+          const inp = document.createElement('input');
+          inp.type = 'text'; // teks, bukan number, agar bisa diformat
+          inp.name = key;
+          inp.setAttribute('inputmode', opts.int ? 'numeric' : 'decimal'); // keypad angka di HP
+          inp.autocomplete = 'off';
+          attachFormatter(inp, opts);
+
+          wrap.appendChild(lab);
+          wrap.appendChild(inp);
+          box.appendChild(wrap);
         }
       }
 
-      // Ambil daftar sektor dari server untuk mengisi dropdown.
+      // Ambil daftar sektor dari server.
       fetch('/api/meta')
         .then((r) => r.json())
         .then((m) => {
@@ -632,9 +709,7 @@
         });
 
       // =========================================================================
-      // (D) DATA CONTOH untuk tombol demo.
-      // Untuk menambah perusahaan: salin satu blok, ganti nama key dan angkanya.
-      // "_indicator" menentukan tab indikator mana yang otomatis dipilih.
+      // (D) DATA CONTOH untuk tombol demo (angka polos; ditampilkan terformat).
       // =========================================================================
       const SAMPLES = {
         'AALI 2023': {
@@ -677,11 +752,14 @@
       function fillForm(name) {
         const data = SAMPLES[name];
         if (!data) return;
-        if (data._indicator) setIndicator(data._indicator); // pindahkan tab indikator
+        if (data._indicator) setIndicator(data._indicator);
         const form = document.getElementById('form');
         for (const [k, v] of Object.entries(data)) {
           if (k === '_indicator') continue;
-          if (form.elements[k]) form.elements[k].value = v; // isi field bila ada
+          if (!form.elements[k]) continue;
+          if (k === 'industry_group')
+            form.elements[k].value = v; // dropdown apa adanya
+          else form.elements[k].value = numberToDisplay(v, FIELD_OPTS[k] || {}); // angka diformat
         }
       }
 
@@ -697,21 +775,21 @@
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        // (C) Validasi bawaan browser: cek semua aturan min/step (negatif, desimal, huruf).
-        // Bila ada yang melanggar, browser menampilkan pesan dan kita batalkan submit.
-        if (!form.reportValidity()) return;
-
         const btn = document.getElementById('submit');
         const err = document.getElementById('err');
         err.style.display = 'none';
         btn.disabled = true;
         btn.textContent = 'Menghitung…';
 
-        // Kumpulkan isian. Indikator diambil dari tab (currentIndicator), bukan dari form.
+        // Indikator dari tab. Tiap field angka diubah dari teks terformat ke angka polos.
         const payload = { indicator: currentIndicator };
         new FormData(form).forEach((v, k) => {
-          if (v === '') return; // field kosong -> tidak dikirim (jadi NaN di server)
-          payload[k] = k === 'industry_group' ? v : Number(v); // selain sektor, kirim sebagai angka
+          if (k === 'industry_group') {
+            if (v) payload[k] = v;
+            return;
+          }
+          const n = parseValue(v); // "13.520.935,54" -> 13520935.54 ; kosong -> null
+          if (n !== null) payload[k] = n;
         });
 
         try {
@@ -736,15 +814,14 @@
       // (F) TAMPILKAN HASIL
       // =========================================================================
       function render(d) {
+        // peringatan konsistensi input (bila ada)
         const warnBox =
           d.input_warnings && d.input_warnings.length
             ? `<div class="err" style="display:block;background:var(--amber-bg);color:var(--amber);margin-bottom:14px;">Periksa kembali input: ${d.input_warnings.join(' ')}</div>`
             : '';
+        document.getElementById('warnings').innerHTML = warnBox;
 
         const r = document.getElementById('result');
-
-        document.getElementById('warnings').innerHTML = warnBox;
-        
         document.getElementById('verdict-label').textContent = d.distress_2y
           ? 'Diprediksi berisiko distress'
           : 'Diprediksi tidak distress';
@@ -754,8 +831,6 @@
         document.getElementById('verdict-sub').textContent =
           `Indikator: ${d.indicator_label}. Prediksi untuk dua tahun ke depan.`;
 
-        // Batang risiko: skala dinamis agar probabilitas & batas keputusan sama-sama terlihat,
-        // karena kedua angka biasanya kecil (akibat kelas yang imbalanced).
         const span = Math.max(d.probability, d.threshold) * 1.6 || 1;
         const fill = document.getElementById('gauge-fill');
         fill.style.width = Math.min(100, (d.probability / span) * 100) + '%';
